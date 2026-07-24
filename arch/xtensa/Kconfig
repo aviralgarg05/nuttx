@@ -122,6 +122,17 @@ config ARCH_CHIP_XTENSA_CUSTOM
 
 endchoice # XTENSA chip selection
 
+config XTENSA_ELF_PIC
+	bool "Build loadable ELF programs as position-independent code"
+	default n
+	depends on ELF
+	select ARCH_HAVE_DATA_HEAP if ARCH_CHIP_ESP32S3
+	select ARCH_USE_DATA_HEAP if ARCH_CHIP_ESP32S3
+	---help---
+		Compile loadable ELF programs with -fpic.  This allows relocatable
+		ELF programs to execute from any text-heap address without being
+		linked for a fixed load address.
+
 config XTENSA_HAVE_ICACHE
 	bool
 	default n

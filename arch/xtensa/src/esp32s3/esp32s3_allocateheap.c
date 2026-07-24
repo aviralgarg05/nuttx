@@ -88,6 +88,16 @@ void up_allocate_heap(void **heap_start, size_t *heap_size)
 
 #ifdef CONFIG_MM_KERNEL_HEAP
 #  ifdef CONFIG_BUILD_PROTECTED
+#    ifdef CONFIG_ESP32S3_SPIRAM_USER_HEAP
+  /* Keep the MMU mapping static and use the mapped PSRAM window as the
+   * protected userspace heap.  Dynamic ELF text and data can then be
+   * allocated at arbitrary addresses in PSRAM.
+   */
+
+  ubase = (uintptr_t)esp_spiram_allocable_vaddr_start();
+  utop  = (uintptr_t)(esp_spiram_allocable_vaddr_end() -
+                      esp_himem_reserved_area_size());
+#    else
   ubase = USERSPACE->us_dataend;
 
   /* Align the heap top address to 256 bytes to match the PMS split address
@@ -95,6 +105,7 @@ void up_allocate_heap(void **heap_start, size_t *heap_size)
    */
 
   utop  = ALIGN_DOWN(ets_rom_layout_p->dram0_rtos_reserved_start, 256);
+#    endif
 
 #  elif defined(CONFIG_BUILD_FLAT)
 #    ifdef MM_USER_HEAP_EXTRAM

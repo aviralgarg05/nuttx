@@ -542,7 +542,7 @@ static void initialize_iram(void)
    */
 
   dest = (uint32_t *)g_header.iram_vma;
-  end  = (uint32_t *)g_header.iram_vma + g_header.iram_size;
+  end  = dest + g_header.iram_size / sizeof(*dest);
 
   while (dest != end)
     {

@@ -237,8 +237,13 @@ LDMODULEFLAGS = -r -T $(call CONVERT_PATH,$(TOPDIR)/libs/libc/elf/gnu-elf.ld)
 
 # ELF module definitions
 
-CELFFLAGS = $(CFLAGS) -fvisibility=hidden -mtext-section-literals
-CXXELFFLAGS = $(CXXFLAGS) -fvisibility=hidden -mtext-section-literals
+ifeq ($(CONFIG_XTENSA_ELF_PIC),y)
+  CELFFLAGS = $(CFLAGS) -fpic -fvisibility=hidden -mtext-section-literals
+  CXXELFFLAGS = $(CXXFLAGS) -fpic -fvisibility=hidden -mtext-section-literals
+else
+  CELFFLAGS = $(CFLAGS) -fvisibility=hidden -mtext-section-literals
+  CXXELFFLAGS = $(CXXFLAGS) -fvisibility=hidden -mtext-section-literals
+endif
 
 LDELFFLAGS = -r -e _start
 LDELFFLAGS += -T $(call CONVERT_PATH,$(TOPDIR)$(DELIM)libs$(DELIM)libc$(DELIM)elf$(DELIM)gnu-elf.ld)

@@ -31,6 +31,7 @@
 
 #define R_XTENSA_NONE       0
 #define R_XTENSA_32         1
+#define R_XTENSA_PLT        6
 #define R_XTENSA_ASM_EXPAND 11
 #define R_XTENSA_SLOT0_OP   20
 

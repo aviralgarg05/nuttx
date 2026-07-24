@@ -212,6 +212,33 @@ void *up_textheap_data_address(void *p)
 }
 
 /****************************************************************************
+ * Name: up_dataheap_memalign
+ *
+ * Description:
+ *   Allocate writable ELF sections from the user heap.  In protected
+ *   builds the ELF loader runs in the kernel, so its normal allocator
+ *   would otherwise place module data in kernel-only memory.
+ *
+ ****************************************************************************/
+
+#ifdef CONFIG_ARCH_USE_DATA_HEAP
+void *up_dataheap_memalign(size_t align, size_t size)
+{
+  return memalign(align, size);
+}
+
+void up_dataheap_free(void *p)
+{
+  free(p);
+}
+
+bool up_dataheap_heapmember(void *p)
+{
+  return umm_heapmember(p);
+}
+#endif
+
+/****************************************************************************
  * Name: up_textheap_data_sync
  *
  * Description:

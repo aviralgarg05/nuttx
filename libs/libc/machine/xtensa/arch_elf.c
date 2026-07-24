@@ -194,6 +194,12 @@ int up_relocateadd(const Elf32_Rela *rel, const Elf32_Sym *sym,
       break;
 
     case R_XTENSA_32:
+    case R_XTENSA_PLT:
+      /* GCC emits R_XTENSA_PLT for the literal backing a PIC call to an
+       * external function.  The resolved value is written to that literal
+       * in the same way as R_XTENSA_32.
+       */
+
       (*(uint32_t *)(up_textheap_data_address((void *)addr))) += value;
       break;
 
